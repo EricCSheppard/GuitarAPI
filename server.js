@@ -1,13 +1,10 @@
 // Import Dependencies -------------------------
 const express = require('express')
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 const morgan = require('morgan')
 require('dotenv').config()
 const path = require('path')
-const middleware = require('./utils/middleware')
-
-// Import Model ---------------------------
-const Guitar = require('./models/guitar')
+const GuitarRouter = require('./controllers/guitarControllers')
 const middleware = require('./utils/middleware')
 
 
@@ -22,7 +19,7 @@ app.get('/', (req, res) => {
     res.send('Server is live, ready for requests.')
 })
 
-
+app.use('/guitars', GuitarRouter)
 
 // Server listener ----------------------------
 const PORT = process.env.PORT
