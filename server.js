@@ -7,19 +7,16 @@ const path = require('path')
 const { ppid } = require('process')
 
 // Import Model ---------------------------
-// const Guitar = require('./models/guitar')
+const Guitar = require('./models/guitar')
 
 // Database Connection ---------------------------
-
 const DATABASE_URL = process.env.DATABASE_URL
-
 const CONFIG = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }
 
 mongoose.connect(DATABASE_URL, CONFIG)
-
 mongoose.connection
     .on('open', () => console.log('Connected to Mongoose'))
     .on('close', () => console.log('Disconnected from Mongoose'))
@@ -41,7 +38,7 @@ app.get('/', (req, res) => {
 
 
 
-// Create our server listener ----------------------------
+// Server listener ----------------------------
 const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`))
 // END 
