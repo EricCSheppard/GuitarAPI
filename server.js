@@ -4,32 +4,18 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 require('dotenv').config()
 const path = require('path')
-const { ppid } = require('process')
+const middleware = require('./utils/middleware')
 
 // Import Model ---------------------------
 const Guitar = require('./models/guitar')
+const middleware = require('./utils/middleware')
 
-// Database Connection ---------------------------
-const DATABASE_URL = process.env.DATABASE_URL
-const CONFIG = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}
 
-mongoose.connect(DATABASE_URL, CONFIG)
-mongoose.connection
-    .on('open', () => console.log('Connected to Mongoose'))
-    .on('close', () => console.log('Disconnected from Mongoose'))
-    .on('error', (err) => console.log('An error occured: \n', err))
 
 // Create our Express App Object ----------------------
 const app = express()
 
-// Middleware ---------------------------------
-app.use(morgan('tiny'))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
-app.use(express.json())
+middleware(app)
 
 // Routes ------------------------------------
 app.get('/', (req, res) => {
