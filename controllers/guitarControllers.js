@@ -4,6 +4,7 @@ const Guitar = require('../models/guitar')
 const router = express.Router()
 
 // INDEX route ------------------------------------------
+
 router.get('/', (req, res) => {
     Guitar.find({})
 
@@ -17,6 +18,7 @@ router.get('/', (req, res) => {
 })
 
 // CREATE route ------------------------------------------
+
 router.post('/', (req, res) => {
     req.body.owner = req.session.userId
     const newGuitar = req.body
@@ -31,6 +33,7 @@ router.post('/', (req, res) => {
 })
 
 // GET route ---------------------------------------------
+
 router.get('/mine', (req, res) => {
     Guitar.find({ owner: req.session.userId })
         .populate('owner', '-password')
@@ -43,5 +46,56 @@ router.get('/mine', (req, res) => {
         })
 })
 
+// UPDATE route -------------------------------------------
+
+router.put('/:id', (req, res) => {
+    const id = req.params.id
+    Guitar.findById(id)
+    .then(guitar => {
+        if (guitar.owner == req.session.userId) {
+            res.sendStatus(204)
+            return guitar.updateOne(req.body)
+        } else {
+            res.sendStatus(401)
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(400).json(err)
+    })
+})
+
+// DELETE route --------------------------------------------
+
+router.delete('/:id', (req, res) => {
+    const id = req.params.id
+    Guitar.findById(id)
+    .then(guitar => {
+        if (guitar.owner == req.session.userId) {
+            res.sendStatus(204)
+            return guitar.deleteOne()
+        } else {
+            res.sendStatus(401)
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(400).json(err)
+    })
+})
+
+// SHOW route ---------------------------------------------
+
+router.get('/:id', (req, res) => {
+    const id = req.params.id
+    Guitar.findById(id)
+    .then(guitar => {
+        res.json({ guitar: guitar })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(404).json(err)
+    })
+})
 
 module.exports = router
