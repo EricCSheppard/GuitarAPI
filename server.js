@@ -5,6 +5,7 @@ const morgan = require('morgan')
 require('dotenv').config()
 const path = require('path')
 const GuitarRouter = require('./controllers/guitarControllers')
+const UserRouter = require('./controllers/userControllers')
 const middleware = require('./utils/middleware')
 
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/guitars', GuitarRouter)
+app.use('/users', UserRouter)
 
 // Server listener ----------------------------
 const PORT = process.env.PORT
