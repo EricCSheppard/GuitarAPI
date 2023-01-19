@@ -35,7 +35,7 @@ router.post('/login', async (req, res) => {
                     req.session.username = username
                     req.session.loggedIn = true
                     req.session.userId = user.id
-                    console.log('this is req.session \n', req.session)
+                    // console.log('this is req.session \n', req.session)
                     res.status(201).json({ username: user.username  })
                 } else {
                     res.json({ error: 'username or password is incorrect' })
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
 // LOGOUT ------------------------------------------
 router.delete('/logout', (req, res) => {
     req.session.destroy(() => {
-        console.log('this is req.session upon logout: \n', req.session)
+        // console.log('this is req.session upon logout: \n', req.session)
         res.sendStatus(204)
     })
 })

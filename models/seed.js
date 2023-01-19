@@ -17,7 +17,19 @@ db.on('open', () => {
         make: "Gibson", 
         pickups: 2,
         inlineTuners: false,
-        strings: 6 }
+        strings: 6 },
+        {
+        model: "Precision Bass", 
+        make: "Fender", 
+        pickups: 1,
+        inlineTuners: true,
+        strings: 4 },
+        {
+        model: "360-12", 
+        make: "Rickenbacker", 
+        pickups: 2,
+        inlineTuners: false,
+        strings: 12 }
     ]
     Guitar.deleteMany({ owner: null })
         .then(() => {
