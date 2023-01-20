@@ -10,16 +10,15 @@ const CommentRouter = require('./controllers/commentControllers')
 const middleware = require('./utils/middleware')
 
 
-
 // Create our Express App Object ----------------------
-const app = express()
+const app = require('liquid-express-views')(express())
 
 middleware(app)
 
 // Routes ------------------------------------
 app.get('/', (req, res) => {
-    res.send('Server is live, ready for requests.')
-})
+    res.render('home.liquid')
+})  
 
 app.use('/guitars', GuitarRouter)
 app.use('/comments', CommentRouter)

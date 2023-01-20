@@ -36,7 +36,8 @@ router.post('/', (req, res) => {
 
 router.get('/mine', (req, res) => {
     Guitar.find({ owner: req.session.userId })
-        .populate('owner', '-password')
+        .populate('owner', 'username')
+        .populate('comments.author', '-password')
         .then(guitars => {
             res.status(200).json({ guitars: guitars })
         })
@@ -89,6 +90,8 @@ router.delete('/:id', (req, res) => {
 router.get('/:id', (req, res) => {
     const id = req.params.id
     Guitar.findById(id)
+    .populate('owner', 'username')
+    .populate('comments.author', '-password')
     .then(guitar => {
         res.json({ guitar: guitar })
     })
