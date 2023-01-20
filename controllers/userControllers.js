@@ -7,6 +7,12 @@ const router = express.Router()
 
 // Routes ------------------------------------
 
+// GET -> /users/signup
+// Renders a liquid page with the sign up form
+router.get('/signup', (req, res) => {
+    res.render('users/signup')
+})
+
 // SIGNUP ------------------------------------
 router.post('/signup', async (req, res) => {
     const newUser = req.body
@@ -16,12 +22,18 @@ router.post('/signup', async (req, res) => {
     )
     User.create(newUser)
     .then(user => {
-        res.status(201).json({ username: user.username })
+        res.redirect('/users/login')
     })
     .catch(err => {
         console.log(err)
-        res.json(err)
+        res.redirect(`/error?error=username%20taken`)
     })
+})
+
+// GET -> /users/login
+// renders a liquid page with the login form
+router.get('/login', (req, res) => {
+    res.render('users/login')
 })
 
 // LOGIN -------------------------------------
@@ -36,18 +48,24 @@ router.post('/login', async (req, res) => {
                     req.session.loggedIn = true
                     req.session.userId = user.id
                     // console.log('this is req.session \n', req.session)
-                    res.status(201).json({ username: user.username  })
+                    res.redirect('/')
                 } else {
-                    res.json({ error: 'username or password is incorrect' })
+                    res.redirect(`/error?error=username%20or%20password%20is%20incorrect`)
                 }
             } else {
-                res.json({ error: 'user does not exist' })
+                res.redirect(`/error?error=user%20does%20not%20exist`)
             }
         })
         .catch(err => {
             console.log(err)
-            res.json(err)
+            res.redirect(`/error?error=${err}`)
         })
+})
+
+// GET -> /users/logout
+// This route renders a page that allows the user to logout
+router.get('/logout', (req, res) => {
+    res.render('users/logout')
 })
 
 
@@ -55,7 +73,7 @@ router.post('/login', async (req, res) => {
 router.delete('/logout', (req, res) => {
     req.session.destroy(() => {
         // console.log('this is req.session upon logout: \n', req.session)
-        res.sendStatus(204)
+        res.redirect('/')
     })
 })
 
