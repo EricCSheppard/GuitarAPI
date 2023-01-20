@@ -7,9 +7,8 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
     Guitar.find({})
-
     .then(guitars => {
-        res.json({ guitars: guitars })
+        res.render('guitars/index', { guitars })
     })
     .catch (err => {
         console.log(err)

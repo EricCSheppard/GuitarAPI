@@ -1,0 +1,13 @@
+{% layout 'layout.liquid' %}
+{% block content %}
+    {% if guitars.length > 0 %}
+        <h2>All Guitars</h2>
+        <ul>
+            {% for guitar in guitars %}
+                <li>{{ guitar.model }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>No Guitars, so sad!</h2>
+    {% endif %}
+{% endblock %}
