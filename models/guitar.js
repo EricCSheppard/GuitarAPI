@@ -2,6 +2,8 @@ const mongoose = require('../utils/connection')
 
 const { Schema, model } = mongoose
 
+const commentSchema = require('./comment')
+
 const guitarSchema = new Schema({
     model: {
         type: String
@@ -21,7 +23,8 @@ const guitarSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    comments: [commentSchema]
 }, { timestamps: true })
 
 const Guitar = model('Guitar', guitarSchema)

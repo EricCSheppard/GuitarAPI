@@ -6,6 +6,7 @@ require('dotenv').config()
 const path = require('path')
 const GuitarRouter = require('./controllers/guitarControllers')
 const UserRouter = require('./controllers/userControllers')
+const CommentRouter = require('./controllers/commentControllers')
 const middleware = require('./utils/middleware')
 
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/guitars', GuitarRouter)
+app.use('/comments', CommentRouter)
 app.use('/users', UserRouter)
 
 // Server listener ----------------------------
