@@ -10,21 +10,20 @@ router.post('/:guitarId', (req, res) => {
     if (req.session.loggedIn) {
         req.body.author = req.session.userId
     const theComment = req.body
-    // find a specific fruit
     Guitar.findById(guitarId)
         .then(fruit => {
             fruit.comments.push(theComment)
             return fruit.save()
         })
         .then(guitar => {
-            res.status(201).json({ guitar: guitar })
+            res.redirect(`/guitars/${guitar.id}`)
         })
     .catch(err => {
         console.log(err)
-        res.status(400).json(err)
+        res.redirect(`/error?error=${err}`)
     })
     } else {
-        res.sendStatus(401)
+        res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20comment%20on%20this%20fruit`)
     }
 })
 
@@ -35,22 +34,22 @@ router.delete('/delete/:guitarId/:commId', (req, res) => {
     Guitar.findById(guitarId)
     .then(guitar => {
         const theComment = guitar.comments.id(commId)
-        console.log('this is the comment to be deleted: \n', theComment)
+        // console.log('this is the comment to be deleted: \n', theComment)
         if (req.session.loggedIn) {
             if (theComment.author == req.session.userId) {
                 theComment.remove()
                 guitar.save()
-                res.sendStatus(204)
+                res.redirect(`/guitars/${guitar.id}`)
             } else {
-                res.sendStatus(401)
+                res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20comment`)
             }
         } else {
-            res.sendStatus(401)
+            res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20comment`)
         }
     })
     .catch(err => {
         console.log(err)
-        res.status(400).json(err)
+        res.redirect(`/error?error=${err}`)
     })
 })
 

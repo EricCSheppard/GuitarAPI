@@ -1,13 +1,25 @@
 {% layout 'layout.liquid' %}
 {% block content %}
     {% if guitars.length > 0 %}
-        <h2>All Guitars</h2>
-        <ul>
-            {% for guitar in guitars %}
-                <li>{{ guitar.model }}</li>
-            {% endfor %}
-        </ul>
+        <div class="container-md">
+            <h2>All Guitars</h2>
+                <div class="row">
+                    {% for guitar in guitars %}
+                        <div class="card me-3 mb-3" style="width: 18rem">
+                            <h5 class="card-header">{{guitar.model}}</h5>
+                            <div class="card body">
+                                <h5 class="card-title">
+                                </h5>
+                                <p class="card-text">A lovely {{guitar.make}} {{guitar.model}}, with {{guitar.pickups}} pickups and {{guitar.strings}} strings.</p>
+                                <a href="/guitars/{{guitar.id}}" class="btn btn-info">View Guitar</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+        </div>
     {% else %}
-        <h2>No Guitars, so sad!</h2>
+        <div class="container-md">
+            <h2>No guitars... Please submit one!</h2>
+        </div>
     {% endif %}
 {% endblock %}

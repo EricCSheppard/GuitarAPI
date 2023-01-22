@@ -17,7 +17,8 @@ middleware(app)
 
 // Routes ------------------------------------
 app.get('/', (req, res) => {
-    res.render('home.liquid')
+    const {username, loggedIn, userId} = req.session
+    res.render('home.liquid', {username, loggedIn, userId})
 })  
 
 app.use('/guitars', GuitarRouter)

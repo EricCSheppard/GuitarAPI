@@ -1,0 +1,32 @@
+{% layout 'layout.liquid' %}
+{% block content %}
+    <div class="container-sm">
+        <form action="/guitars/{{guitar.id}}?_method=PUT" method="POST">
+            <fieldset>
+                <legend>Edit {{guitar.make}} {{guitar.model}}</legend>
+                <label class="form-label">Model:</label>
+                <input 
+                    type="text" class="form-control" 
+                    name="model" placeholder="Guitar model?"
+                    required value="{{guitar.model}}"
+                >
+                <label class="form-label">Make:</label>
+                <input 
+                    type="text" class="form-control" 
+                    name="make" placeholder="Guitar make?"
+                    required value="{{guitar.make}}"
+                    >
+                <label class="form-label">Number of pickups:</label>
+                <input 
+                    type="number" class="form-control" 
+                    name="pickups" value="3">
+                <label class="form-label">Number of strings:</label>
+                <input 
+                    type="number" class="form-control mb-3" 
+                    name="strings" value="6">
+            </fieldset>
+            <input type="submit" class="btn btn-success" value="Edit Guitar">
+            <a href="/guitars/{{guitar.id}}" class="btn btn-warning">Back</a>
+        </form>
+    </div>
+{% endblock %}

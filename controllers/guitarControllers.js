@@ -6,15 +6,21 @@ const router = express.Router()
 // INDEX route ------------------------------------------
 
 router.get('/', (req, res) => {
+    const {username, loggedIn, userId} = req.session
     Guitar.find({})
     .then(guitars => {
-        res.render('guitars/index', { guitars })
+        res.render('guitars/index', { guitars, username, loggedIn, userId })
     })
     .catch (err => {
         console.log(err)
         res.status(404).json(err)
     })
 })
+
+// SUBMIT a new guitar ---------------------------------
+router.get('/new', (req, res) => {
+    res.render('guitars/new', {...req.session})
+    })
 
 // CREATE route ------------------------------------------
 
@@ -23,11 +29,11 @@ router.post('/', (req, res) => {
     const newGuitar = req.body
     Guitar.create(newGuitar)
     .then(guitar => {
-        res.status(201).json({ guitar: guitar.toObject() })
+        res.redirect(`/guitars/${guitar.id}`)
     })
     .catch(err => {
         console.log(err)
-        res.status(404).json(err)
+        res.redirect(`/error?error=${err}`)
     })
 })
 
@@ -38,13 +44,26 @@ router.get('/mine', (req, res) => {
         .populate('owner', 'username')
         .populate('comments.author', '-password')
         .then(guitars => {
-            res.status(200).json({ guitars: guitars })
+            res.render('guitars/index', { guitars, ...req.session })
         })
         .catch(err => {
             console.log(err)
-            res.status(400).json(err)
+            res.redirect(`/error?error=${err}`)
         })
 })
+
+//GET Request --------------------------------------------
+router.get('/edit/:id', (req, res) => {
+    const guitarId = req.params.id
+    Guitar.findById(guitarId)
+    .then(guitar => {
+        res.render('guitars/edit', {guitar, ...req.session})
+    })
+    .catch(err => {
+        res.redirect(`/error?error=${err}`)
+    })
+})
+
 
 // UPDATE route -------------------------------------------
 
@@ -53,11 +72,14 @@ router.put('/:id', (req, res) => {
     Guitar.findById(id)
     .then(guitar => {
         if (guitar.owner == req.session.userId) {
-            res.sendStatus(204)
+            // res.sendStatus(204)
             return guitar.updateOne(req.body)
         } else {
-            res.sendStatus(401)
+            res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20edit%20this%20guitar`)
         }
+    })
+    .then(() => {
+        res.redirect('/guitars/mine')
     })
     .catch(err => {
         console.log(err)
@@ -72,11 +94,13 @@ router.delete('/:id', (req, res) => {
     Guitar.findById(id)
     .then(guitar => {
         if (guitar.owner == req.session.userId) {
-            res.sendStatus(204)
             return guitar.deleteOne()
         } else {
-            res.sendStatus(401)
+            res.redirect(`/error?error=You%20Are%20not%20allowed%20to%20delete%20this%20guitar`)
         }
+    })
+    .then(() => {
+        res.redirect('/guitars/mine')
     })
     .catch(err => {
         console.log(err)
@@ -92,11 +116,11 @@ router.get('/:id', (req, res) => {
     .populate('owner', 'username')
     .populate('comments.author', '-password')
     .then(guitar => {
-        res.json({ guitar: guitar })
+        res.render('guitars/show.liquid', {guitar, ...req.session})
     })
     .catch(err => {
         console.log(err)
-        res.status(404).json(err)
+        res.redirect(`/error?error=${err}`)
     })
 })
 
