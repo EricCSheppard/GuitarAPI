@@ -11,9 +11,9 @@ router.post('/:guitarId', (req, res) => {
         req.body.author = req.session.userId
     const theComment = req.body
     Guitar.findById(guitarId)
-        .then(fruit => {
-            fruit.comments.push(theComment)
-            return fruit.save()
+        .then(guitar => {
+            guitar.comments.push(theComment)
+            return guitar.save()
         })
         .then(guitar => {
             res.redirect(`/guitars/${guitar.id}`)
